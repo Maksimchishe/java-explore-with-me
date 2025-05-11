@@ -39,6 +39,10 @@ public class StatsRepository {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("start", vSR.getStart());
         params.addValue("end", vSR.getEnd());
+
+        System.out.println(vSR.getStart());
+        System.out.println(vSR.getEnd());
+
         if (vSR.getUris() == null || vSR.getUris().isEmpty()) {
             if (vSR.isUnique()) {
                 String sqlViewStats = """

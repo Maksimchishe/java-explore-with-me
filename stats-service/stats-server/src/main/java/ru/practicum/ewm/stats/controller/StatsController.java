@@ -3,6 +3,7 @@ package ru.practicum.ewm.stats.controller;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import ru.practicum.ewm.dto.stats.EndpointHit;
 import ru.practicum.ewm.dto.stats.ViewStats;
 import ru.practicum.ewm.stats.service.StatsService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -32,10 +34,12 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public ResponseEntity<List<ViewStats>> getStats(@RequestParam @NonNull String start,
-                                                    @RequestParam @NonNull String end,
+    public ResponseEntity<List<ViewStats>> getStats(@RequestParam
+                                                    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+                                                    @RequestParam
+                                                    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
                                                     @RequestParam(required = false) List<String> uris,
-                                                    @RequestParam(defaultValue = "false") boolean unique) {
+                                                    @RequestParam(defaultValue = "false") Boolean unique) {
         log.info("StatsController / getStats: Получение статистики по посещениям " +
                  start + end + uris + unique);
         List<ViewStats> results = statsService.calculateViews(start, end, uris, unique);

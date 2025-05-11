@@ -30,22 +30,18 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<ViewStats> calculateViews(String start, String end, List<String> uris, boolean unique) {
+    public List<ViewStats> calculateViews(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         ViewStatsRequest.ViewStatsRequestBuilder builder = ViewStatsRequest.builder()
                 .unique(unique);
         builder.uris(uris);
 
-        try {
-            builder.start(LocalDateTime.parse(start, DTF));
-            builder.end(LocalDateTime.parse(end, DTF));
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd h:m:s");
-            log.info("StatsService / calculateViews / start {}  end {} ", start, end);
-            if (sdf.parse(end).before(sdf.parse(start))) {
-                throw new ValidationException("Дата начала не может быть раньше даты конца");
-            }
-        } catch (DateTimeException | ParseException e) {
-            throw new ValidationException("Некорректный диапазон дат: " + e.getLocalizedMessage());
+        if (start.isAfter(end)) {
+            throw new ValidationException("Дата начала находится после даты окончания.");
         }
+
+        log.info("StatsService / calculateViews / start {}  end {} ", start, end);
+        builder.start(start);
+        builder.end(end);
 
         return hitRepository.getIntervalStats(builder.build());
     }
