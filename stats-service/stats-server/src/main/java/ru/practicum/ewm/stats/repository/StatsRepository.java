@@ -40,9 +40,6 @@ public class StatsRepository {
         params.addValue("start", vSR.getStart());
         params.addValue("end", vSR.getEnd());
 
-        System.out.println(vSR.getStart());
-        System.out.println(vSR.getEnd());
-
         if (vSR.getUris() == null || vSR.getUris().isEmpty()) {
             if (vSR.isUnique()) {
                 String sqlViewStats = """
@@ -64,14 +61,14 @@ public class StatsRepository {
                 return jdbcTemplate.queryForList(sqlViewStats, params, ViewStats.class);
             }
         } else {
-
             params.addValue("uris", listToString(vSR.getUris()));
-
+System.out.println(params);
             if (vSR.isUnique()) {
                 String sqlViewStats = """
                         select s.app, s.uri, count(distinct s.ip) as hits
                         from stats as s
-                        where s.created between :start and :end and (:uris) like '%' || s.uri || ',%'
+                        where s.created between :start and :end
+                        and (:uris) like '%' || s.uri || ',%'
                         group by s.app, s.uri
                         order by count(distinct s.ip) desc
                         """;
@@ -80,7 +77,8 @@ public class StatsRepository {
                 String sqlViewStats = """
                         select s.app, s.uri, count(s.ip) as hits
                         from stats as s
-                        where s.created between :start and :end and (:uris) like '%' || s.uri || ',%'
+                        where s.created between :start and :end
+                        and (:uris) like '%' || s.uri || ',%'
                         group by s.app, s.uri
                         order by count(s.ip) desc
                         """;
