@@ -9,9 +9,6 @@ import ru.practicum.ewm.dto.stats.ViewStatsRequest;
 import ru.practicum.ewm.stats.errorHandler.exceptions.ValidationException;
 import ru.practicum.ewm.stats.repository.StatsRepository;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;

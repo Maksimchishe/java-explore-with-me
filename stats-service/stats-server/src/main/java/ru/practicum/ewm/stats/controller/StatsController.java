@@ -1,6 +1,5 @@
 package ru.practicum.ewm.stats.controller;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
