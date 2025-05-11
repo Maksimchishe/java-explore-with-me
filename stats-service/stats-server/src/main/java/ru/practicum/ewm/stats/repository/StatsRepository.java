@@ -11,6 +11,8 @@ import ru.practicum.ewm.dto.stats.EndpointHit;
 import ru.practicum.ewm.dto.stats.ViewStats;
 import ru.practicum.ewm.dto.stats.ViewStatsRequest;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -49,7 +51,7 @@ public class StatsRepository {
                         group by s.app, s.uri
                         order by count(distinct s.ip) desc
                         """;
-                return jdbcTemplate.queryForList(sqlViewStats, params, ViewStats.class);
+                return jdbcTemplate.query(sqlViewStats, params, (rs, rowNum) -> makeViewStats(rs));
             } else {
                 String sqlViewStats = """
                         select s.app, s.uri, count(s.ip) as hits
@@ -58,11 +60,11 @@ public class StatsRepository {
                         group by s.app, s.uri
                         order by count(s.ip) desc
                         """;
-                return jdbcTemplate.queryForList(sqlViewStats, params, ViewStats.class);
+                return jdbcTemplate.query(sqlViewStats, params, (rs, rowNum) -> makeViewStats(rs));
             }
         } else {
             params.addValue("uris", listToString(vSR.getUris()));
-System.out.println(params);
+            System.out.println(params);
             if (vSR.isUnique()) {
                 String sqlViewStats = """
                         select s.app, s.uri, count(distinct s.ip) as hits
@@ -72,7 +74,7 @@ System.out.println(params);
                         group by s.app, s.uri
                         order by count(distinct s.ip) desc
                         """;
-                return jdbcTemplate.queryForList(sqlViewStats, params, ViewStats.class);
+                return jdbcTemplate.query(sqlViewStats, params, (rs, rowNum) -> makeViewStats(rs));
             } else {
                 String sqlViewStats = """
                         select s.app, s.uri, count(s.ip) as hits
@@ -82,9 +84,16 @@ System.out.println(params);
                         group by s.app, s.uri
                         order by count(s.ip) desc
                         """;
-                return jdbcTemplate.queryForList(sqlViewStats, params, ViewStats.class);
+                return jdbcTemplate.query(sqlViewStats, params, (rs, rowNum) -> makeViewStats(rs));
             }
         }
+    }
+
+    private ViewStats makeViewStats(ResultSet rs) throws SQLException {
+        String app = rs.getString("app");
+        String uri = rs.getString("uri");
+        Long hits = rs.getLong("hits");
+        return new ViewStats(app, uri, hits);
     }
 
     private String listToString(List<String> stringList) {
