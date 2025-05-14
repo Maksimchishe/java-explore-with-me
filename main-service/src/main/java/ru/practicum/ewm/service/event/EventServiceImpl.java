@@ -58,10 +58,10 @@ public class EventServiceImpl implements EventService {
     public EventFullDto addEvent(Long userId, NewEventDto newEventDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User does not exist " + userId));
-        if (newEventDto.getDescription().isEmpty()) {
+        if (newEventDto.getDescription().isBlank()) {
             throw new ValidationException("Поле Description не может быть пустым.");
         }
-        if (newEventDto.getAnnotation().isEmpty()) {
+        if (newEventDto.getAnnotation().isBlank()) {
             throw new ValidationException("Поле Annotation не может быть пустым.");
         }
         if (newEventDto.getParticipantLimit() < 0) {
