@@ -58,6 +58,15 @@ public class EventServiceImpl implements EventService {
     public EventFullDto addEvent(Long userId, NewEventDto newEventDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User does not exist " + userId));
+        if (newEventDto.getDescription().isEmpty()) {
+            throw new ValidationException("Поле Description не может быть пустым.");
+        }
+        if (newEventDto.getAnnotation().isEmpty()) {
+            throw new ValidationException("Поле Annotation не может быть пустым.");
+        }
+        if (newEventDto.getParticipantLimit() < 0) {
+            throw new ValidationException("Поле ParticipantLimit не может быть отрицательным.");
+        }
         if (newEventDto.getEventDate().minusHours(2).isBefore(LocalDateTime.now())) {
             throw new ValidationException("дата и время на которые намечено событие не может быть раньше, " +
                                           "чем через два часа от текущего момента");
@@ -84,6 +93,9 @@ public class EventServiceImpl implements EventService {
     public EventFullDto updateEventByInitiator(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
         Event eventToUpdate = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event does not exist " + eventId));
+        if (updateEventUserRequest.getParticipantLimit() < 0) {
+            throw new ValidationException("Поле ParticipantLimit не может быть отрицательным.");
+        }
         if (eventToUpdate.getState().equals(EventState.CANCELED) || eventToUpdate.getState().equals(EventState.PENDING)) {
             if (updateEventUserRequest.getEventDate() != null
                 && updateEventUserRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
