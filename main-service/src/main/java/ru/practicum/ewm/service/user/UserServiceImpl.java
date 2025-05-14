@@ -7,7 +7,6 @@ import ru.practicum.ewm.dto.user.NewUserRequest;
 import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.errorHandler.exceptions.AlreadyExistsException;
 import ru.practicum.ewm.errorHandler.exceptions.NotFoundException;
-import ru.practicum.ewm.errorHandler.exceptions.ValidationException;
 import ru.practicum.ewm.mapper.UserMapper;
 import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.repository.UserRepository;
