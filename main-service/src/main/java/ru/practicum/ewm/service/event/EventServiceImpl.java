@@ -93,7 +93,7 @@ public class EventServiceImpl implements EventService {
     public EventFullDto updateEventByInitiator(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
         Event eventToUpdate = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event does not exist " + eventId));
-        if (eventToUpdate.getParticipantLimit() < 0) {
+        if (updateEventUserRequest.getParticipantLimit() < 0) {
             throw new ValidationException("Поле ParticipantLimit не может быть отрицательным.");
         }
         if (eventToUpdate.getState().equals(EventState.CANCELED) || eventToUpdate.getState().equals(EventState.PENDING)) {
