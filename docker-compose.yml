@@ -1,3 +1,4 @@
+version: '3.1'
 services:
   stats-server:
     build: stats-service/stats-server
@@ -8,7 +9,7 @@ services:
     depends_on:
       - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
 
@@ -20,7 +21,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=root
       - POSTGRES_USER=root
-      - POSTGRES_DB=stats-db
+      - POSTGRES_DB=ewm-stats
 
   ewm-service:
     build: main-service

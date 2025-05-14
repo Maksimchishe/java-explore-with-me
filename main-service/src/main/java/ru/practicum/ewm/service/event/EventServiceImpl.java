@@ -64,9 +64,9 @@ public class EventServiceImpl implements EventService {
         if (newEventDto.getAnnotation().isBlank()) {
             throw new ValidationException("Поле Annotation не может быть пустым.");
         }
-        if (newEventDto.getParticipantLimit() < 0L) {
-            throw new ValidationException("Поле ParticipantLimit не может быть отрицательным.");
-        }
+//        if (newEventDto.getParticipantLimit().) {
+//            throw new ValidationException("Поле ParticipantLimit не может быть отрицательным.");
+//        }
         if (newEventDto.getEventDate().minusHours(2).isBefore(LocalDateTime.now())) {
             throw new ValidationException("дата и время на которые намечено событие не может быть раньше, " +
                                           "чем через два часа от текущего момента");
@@ -93,9 +93,7 @@ public class EventServiceImpl implements EventService {
     public EventFullDto updateEventByInitiator(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
         Event eventToUpdate = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event does not exist " + eventId));
-        if (updateEventUserRequest.getParticipantLimit() < 0L) {
-            throw new ValidationException("Поле ParticipantLimit не может быть отрицательным.");
-        }
+
         if (eventToUpdate.getState().equals(EventState.CANCELED) || eventToUpdate.getState().equals(EventState.PENDING)) {
             if (updateEventUserRequest.getEventDate() != null
                 && updateEventUserRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
@@ -154,7 +152,6 @@ public class EventServiceImpl implements EventService {
     public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         Event eventToUpdate = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event does not exist " + eventId));
-
         if (updateEventAdminRequest.getEventDate() != null) {
             if (updateEventAdminRequest.getEventDate().minusHours(1).isBefore(LocalDateTime.now())) {
                 throw new ValidationException("Дата начала события должна быть не ранее чем за час от даты публикации");
@@ -178,6 +175,7 @@ public class EventServiceImpl implements EventService {
                 eventToUpdate.setState(EventState.CANCELED);
             }
         }
+
         updateEventEntity(updateEventAdminRequest, eventToUpdate);
         eventRepository.save(eventToUpdate);
         return addConfirmedRequestsAndViews(eventMapper.toEventFullDto(eventToUpdate));
@@ -284,7 +282,7 @@ public class EventServiceImpl implements EventService {
         List<String> uris = new ArrayList<>();
         uris.add("/events/" + eventFullDto.getId());
         ViewStatsRequest viewStatsRequest = new ViewStatsRequest(
-                LocalDateTime.now().minusYears(100),
+                LocalDateTime.now().minusYears(10),
                 LocalDateTime.now(),
                 uris,
                 true);
@@ -303,7 +301,7 @@ public class EventServiceImpl implements EventService {
         List<String> uris = new ArrayList<>();
         uris.add("/events/" + eventShortDto.getId());
         ViewStatsRequest viewStatsRequest = new ViewStatsRequest(
-                LocalDateTime.now().minusYears(100),
+                LocalDateTime.now().minusYears(10),
                 LocalDateTime.now(),
                 uris,
                 true);
