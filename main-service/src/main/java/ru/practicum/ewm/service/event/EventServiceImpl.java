@@ -64,8 +64,10 @@ public class EventServiceImpl implements EventService {
         if (newEventDto.getAnnotation().isBlank()) {
             throw new ValidationException("Поле Annotation не может быть пустым.");
         }
-        if (newEventDto.getParticipantLimit() < 0L  && newEventDto.getParticipantLimit() != null) {
-            throw new ValidationException("Поле ParticipantLimit не может быть отрицательным.");
+        if (newEventDto.getParticipantLimit() != null) {
+            if (newEventDto.getParticipantLimit() < 0L) {
+                throw new ValidationException("Поле ParticipantLimit не может быть отрицательным.");
+            }
         }
         if (newEventDto.getEventDate().minusHours(2).isBefore(LocalDateTime.now())) {
             throw new ValidationException("дата и время на которые намечено событие не может быть раньше, " +
@@ -94,8 +96,10 @@ public class EventServiceImpl implements EventService {
         Event eventToUpdate = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event does not exist " + eventId));
 
-        if (updateEventUserRequest.getParticipantLimit() < 0L && updateEventUserRequest.getParticipantLimit() != null) {
-            throw new ValidationException("Поле ParticipantLimit не может быть отрицательным.");
+        if (updateEventUserRequest.getParticipantLimit() != null) {
+            if (updateEventUserRequest.getParticipantLimit() < 0L) {
+                throw new ValidationException("Поле ParticipantLimit не может быть отрицательным.");
+            }
         }
 
         if (eventToUpdate.getState().equals(EventState.CANCELED) || eventToUpdate.getState().equals(EventState.PENDING)) {
