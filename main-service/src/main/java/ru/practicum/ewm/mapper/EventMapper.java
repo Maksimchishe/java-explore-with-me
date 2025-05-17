@@ -12,7 +12,6 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface EventMapper {
-
     @Mapping(source = "category", target = "category.id")
     Event toEvent(NewEventDto newEventDto);
 

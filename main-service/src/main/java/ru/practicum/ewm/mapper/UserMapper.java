@@ -10,7 +10,6 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
-
     User toUser(NewUserRequest newUserRequest);
 
     UserDto toUserDto(User user);
