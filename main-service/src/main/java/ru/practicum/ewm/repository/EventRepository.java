@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.practicum.ewm.enums.EventState;
 import ru.practicum.ewm.model.Event;
@@ -37,11 +36,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             AND (cast(:rangeEnd as timestamp) is null or e.event_date < cast(:rangeEnd as timestamp))
             """,
             nativeQuery = true)
-    Page<Event> searchPublishedEvents(@Param("text") String text,
-                                      @Param("categories") List<Long> categories,
-                                      @Param("paid") Boolean paid,
-                                      @Param("rangeStart") LocalDateTime start,
-                                      @Param("rangeEnd") LocalDateTime end,
+    Page<Event> searchPublishedEvents(String text,
+                                      List<Long> categories,
+                                      Boolean paid,
+                                      LocalDateTime start,
+                                      LocalDateTime end,
                                       Pageable pageable);
 
     @Query(value = """
@@ -53,10 +52,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             AND (cast(:rangeEnd as timestamp)  is null or e.event_date < cast(:rangeEnd as timestamp))
             """,
             nativeQuery = true)
-    Page<Event> findEvents(@Param("userIds") List<Long> userIds,
-                           @Param("states") List<String> states,
-                           @Param("categories") List<Long> categories,
-                           @Param("rangeStart") LocalDateTime rangeStart,
-                           @Param("rangeEnd") LocalDateTime rangeEnd,
+    Page<Event> findEvents(List<Long> userIds,
+                           List<String> states,
+                           List<Long> categories,
+                           LocalDateTime rangeStart,
+                           LocalDateTime rangeEnd,
                            Pageable pageable);
 }

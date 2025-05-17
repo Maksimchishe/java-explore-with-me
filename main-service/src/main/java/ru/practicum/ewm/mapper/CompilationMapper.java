@@ -1,13 +1,14 @@
 package ru.practicum.ewm.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import ru.practicum.ewm.dto.compilation.CompilationDto;
 import ru.practicum.ewm.dto.compilation.NewCompilationDto;
 import ru.practicum.ewm.model.Compilation;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CompilationMapper {
 
     default Compilation toCompilation(NewCompilationDto newCompilationDto) {

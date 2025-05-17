@@ -2,7 +2,6 @@ package ru.practicum.ewm.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import ru.practicum.ewm.enums.RequestStatus;
 import ru.practicum.ewm.model.Request;
 
@@ -24,7 +23,7 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             where r.requester.id = :userId
             and e.initiator.id <> :userId
             """)
-    List<Request> findAllByRequesterIdAndNotInitiator(@Param("userId") Long userId);
+    List<Request> findAllByRequesterIdAndNotInitiator(Long userId);
 
     List<Request> findAllByEvent_InitiatorIdAndEvent_Id(Long userId, Long eventId);
 }

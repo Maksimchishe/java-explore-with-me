@@ -2,6 +2,7 @@ package ru.practicum.ewm.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import ru.practicum.ewm.dto.event.EventFullDto;
 import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.dto.event.NewEventDto;
@@ -9,7 +10,7 @@ import ru.practicum.ewm.model.Event;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface EventMapper {
 
     @Mapping(source = "category", target = "category.id")
