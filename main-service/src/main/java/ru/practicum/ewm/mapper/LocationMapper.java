@@ -7,6 +7,7 @@ import ru.practicum.ewm.model.Location;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface LocationMapper {
+
     Location toLocation(LocationDto locationDto);
 
     LocationDto toLocationDto(Location location);
