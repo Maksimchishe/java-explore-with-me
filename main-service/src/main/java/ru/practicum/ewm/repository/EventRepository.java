@@ -32,8 +32,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             AND (:categories is null or e.category_id IN (cast(cast(:categories as text) as bigint)))
             AND e.state = 'PUBLISHED'
             AND (:paid is null or e.paid = cast(cast(:paid as text) as boolean))
-            AND (e.event_date >= :rangeStart)
-            AND (cast(:rangeEnd as timestamp) is null or e.event_date < cast(:rangeEnd as timestamp))
+            AND (e.event_date >= :start)
+            AND (cast(:end as timestamp) is null or e.event_date < cast(:end as timestamp))
             """,
             nativeQuery = true)
     Page<Event> searchPublishedEvents(String text,
@@ -48,14 +48,14 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             WHERE (:userIds is null or e.initiator_id IN (cast(cast(:userIds as text) as bigint)))
             AND (:states is null or e.state IN (cast(:states as text)))
             AND (:categories is null or e.category_id IN (cast(cast(:categories as text) as bigint)))
-            AND (cast(:rangeStart as timestamp) is null or e.event_date >= cast(:rangeStart as timestamp))
-            AND (cast(:rangeEnd as timestamp)  is null or e.event_date < cast(:rangeEnd as timestamp))
+            AND (cast(:start as timestamp) is null or e.event_date >= cast(:start as timestamp))
+            AND (cast(:end as timestamp)  is null or e.event_date < cast(:end as timestamp))
             """,
             nativeQuery = true)
     Page<Event> findEvents(List<Long> userIds,
                            List<String> states,
                            List<Long> categories,
-                           LocalDateTime rangeStart,
-                           LocalDateTime rangeEnd,
+                           LocalDateTime start,
+                           LocalDateTime end,
                            Pageable pageable);
 }
