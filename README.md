@@ -107,7 +107,7 @@ API основного сервиса разделен на три части:
 - Postman
 
 ## Ссылка на проект
-https://github.com/Maksimchishe/java-explore-with-me/pull/3
+https://github.com/Maksimchishe/java-explore-with-me/pull/4
 
 
 
