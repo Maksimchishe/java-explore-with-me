@@ -19,10 +19,10 @@ public class Comment {
     Long id;
     @Column(name = "created")
     LocalDateTime created;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     Event event;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commentator_id")
     User commentator;
     @Column(name = "comment_text")
